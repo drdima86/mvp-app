@@ -2,163 +2,509 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Charge Alert – EVSE Tracker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charge Alert – EVSE Realtime</title>
+  <meta name="theme-color" content="#0b1220" />
   <style>
-    body { font-family: Arial; max-width: 700px; margin: 40px auto; }
-    h1 { margin-bottom: 20px; }
-    input, button { padding: 10px; margin: 5px 0; width: 100%; }
-    .status { font-size: 24px; margin-top: 15px; }
-    .free { color: green; }
-    .busy { color: red; }
-    .unknown { color: gray; }
-    .box { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+    :root{
+      --bg:#0b1220;
+      --panel:#111a2b;
+      --panel2:#162238;
+      --text:#e7ecf5;
+      --muted:#9aa8bd;
+      --line:rgba(255,255,255,.08);
+      --primary:#2563eb;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --warning:#d97706;
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#08101d 0%,#0b1220 100%);
+      color:var(--text);
+      padding:24px;
+    }
+
+    .app{
+      max-width:840px;
+      margin:0 auto;
+    }
+
+    .card{
+      background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      margin-bottom:18px;
+    }
+
+    h1,h2,h3{
+      margin:0 0 10px;
+      line-height:1.2;
+    }
+
+    .subtle{
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+    }
+
+    .grid.two{
+      grid-template-columns:1fr 1fr;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:600;
+    }
+
+    input, select{
+      width:100%;
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      outline:none;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:14px 16px;
+      border-radius:14px;
+      color:white;
+      background:var(--primary);
+      font-weight:600;
+    }
+
+    button.secondary{
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--line);
+    }
+
+    button.danger{
+      background:var(--danger);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.9rem;
+      border:1px solid transparent;
+    }
+
+    .badge.free{
+      background:rgba(22,163,74,.12);
+      color:#bdf3cd;
+      border-color:rgba(22,163,74,.24);
+    }
+
+    .badge.busy{
+      background:rgba(220,38,38,.12);
+      color:#ffc8c8;
+      border-color:rgba(220,38,38,.24);
+    }
+
+    .badge.unknown{
+      background:rgba(217,119,6,.12);
+      color:#fde5b5;
+      border-color:rgba(217,119,6,.24);
+    }
+
+    .status-panel{
+      display:grid;
+      gap:12px;
+    }
+
+    .status-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+    }
+
+    .status-row:last-child{
+      border-bottom:none;
+    }
+
+    .value{
+      font-weight:700;
+      word-break:break-word;
+    }
+
+    .history{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .history-item{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+
+    .footer-note{
+      color:var(--muted);
+      margin-top:12px;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+
+    @media(max-width:700px){
+      .grid.two{
+        grid-template-columns:1fr;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="app">
+    <div class="card">
+      <h1>⚡ Charge Alert – EVSE Realtime</h1>
+      <p class="subtle">
+        Tracking einer konkreten EVSE-ID (z. B. DE*MDS*E004231) mit Polling und Browser-Benachrichtigung.
+        Diese UI erwartet einen Backend-Endpunkt <code>/api/evse-status?evseId=...</code>, der einen
+        normalisierten Echtzeit-Status zurückliefert.
+      </p>
+    </div>
 
-<h1>⚡ Charge Alert (EVSE)</h1>
+    <div class="card">
+      <h2>Tracking konfigurieren</h2>
 
-<div class="box">
-  <input id="stationId" placeholder="EVSE-ID eingeben (z. B. DE*MDS*E004231)">
-  <button onclick="startTracking()">Tracking starten</button>
+      <div class="grid two">
+        <div>
+          <label for="evseId">EVSE-ID</label>
+          <input id="evseId" placeholder="z. B. DE*MDS*E004231" />
+        </div>
 
-  <div class="status" id="statusText">Status: -</div>
+        <div>
+          <label for="intervalSec">Polling-Intervall</label>
+          <select id="intervalSec">
+            <option value="15">15 Sekunden</option>
+            <option value="30" selected>30 Sekunden</option>
+            <option value="60">60 Sekunden</option>
+          </select>
+        </div>
+      </div>
 
-  <div>
-    <div><b>ID:</b> <span id="idOut">-</span></div>
-    <div><b>Last check:</b> <span id="lastCheck">-</span></div>
-    <div><b>Info:</b> <span id="info">-</span></div>
+      <div class="actions">
+        <button id="startBtn">Tracking starten</button>
+        <button id="checkBtn" class="secondary">Jetzt prüfen</button>
+        <button id="stopBtn" class="danger">Tracking stoppen</button>
+      </div>
+
+      <div class="footer-note">
+        Erwartetes Backend-JSON:
+        <code>{ "evseId":"...", "status":"free|busy|unknown", "provider":"Shell|Hubject|OCPI", "lastUpdated":"...", "locationName":"...", "message":"..." }</code>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Aktueller Status</h2>
+      <div class="status-panel">
+        <div class="status-row">
+          <span>Status</span>
+          <span id="statusBadge" class="badge unknown">Unbekannt</span>
+        </div>
+        <div class="status-row">
+          <span>EVSE-ID</span>
+          <span id="trackedId" class="value">–</span>
+        </div>
+        <div class="status-row">
+          <span>Provider</span>
+          <span id="providerInfo" class="value">–</span>
+        </div>
+        <div class="status-row">
+          <span>Location</span>
+          <span id="locationInfo" class="value">–</span>
+        </div>
+        <div class="status-row">
+          <span>Letztes Provider-Update</span>
+          <span id="providerUpdated" class="value">–</span>
+        </div>
+        <div class="status-row">
+          <span>Letzter Check in App</span>
+          <span id="lastChecked" class="value">–</span>
+        </div>
+        <div class="status-row">
+          <span>Info</span>
+          <span id="resultInfo" class="value">–</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Ereignisse</h2>
+      <div id="history" class="history"></div>
+    </div>
   </div>
-</div>
 
-<script>
-let interval = null;
-let lastStatus = null;
+  <script>
+    const STORAGE_KEY = "chargeAlertEvseRealtimeV1";
 
-/* =========================
-   START TRACKING
-========================= */
-function startTracking() {
-  const id = document.getElementById("stationId").value.trim();
+    // Backend-Endpunkt – bei Bedarf anpassen
+    const API_BASE = "/api/evse-status";
 
-  if (!id) {
-    alert("Bitte EVSE-ID eingeben");
-    return;
-  }
+    const state = {
+      evseId: "",
+      intervalSec: 30,
+      timer: null,
+      lastStatus: null,
+      lastChecked: null,
+      history: [],
+      running: false
+    };
 
-  document.getElementById("idOut").textContent = id;
+    const el = {
+      evseId: document.getElementById("evseId"),
+      intervalSec: document.getElementById("intervalSec"),
+      startBtn: document.getElementById("startBtn"),
+      stopBtn: document.getElementById("stopBtn"),
+      checkBtn: document.getElementById("checkBtn"),
+      statusBadge: document.getElementById("statusBadge"),
+      trackedId: document.getElementById("trackedId"),
+      providerInfo: document.getElementById("providerInfo"),
+      locationInfo: document.getElementById("locationInfo"),
+      providerUpdated: document.getElementById("providerUpdated"),
+      lastChecked: document.getElementById("lastChecked"),
+      resultInfo: document.getElementById("resultInfo"),
+      history: document.getElementById("history")
+    };
 
-  if (interval) clearInterval(interval);
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        state.evseId = saved.evseId || "";
+        state.intervalSec = saved.intervalSec || 30;
+        state.lastStatus = saved.lastStatus || null;
+        state.history = Array.isArray(saved.history) ? saved.history : [];
+      } catch {}
+    }
 
-  fetchStatus(id);
-  interval = setInterval(() => fetchStatus(id), 15000);
-}
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        evseId: state.evseId,
+        intervalSec: state.intervalSec,
+        lastStatus: state.lastStatus,
+        history: state.history.slice(0, 20)
+      }));
+    }
 
-/* =========================
-   FETCH STATUS
-========================= */
-async function fetchStatus(evseId) {
-  try {
-    // 👉 offene API (keine Auth nötig)
-    const res = await fetch(
-      `https://api.openchargemap.io/v3/poi/?output=json&maxresults=20&countrycode=DE`
-    );
+    function nowString() {
+      return new Date().toLocaleString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+    }
 
-    const data = await res.json();
+    function addHistory(text) {
+      state.history.unshift({
+        text,
+        time: nowString()
+      });
+      state.history = state.history.slice(0, 20);
+      saveState();
+      renderHistory();
+    }
 
-    // =========================
-    // 🔎 EVSE-MATCH
-    // =========================
-    let match = null;
+    function renderHistory() {
+      if (!state.history.length) {
+        el.history.innerHTML = '<div class="history-item">Noch keine Ereignisse</div>';
+        return;
+      }
 
-    for (const poi of data) {
-      if (!poi.Connections) continue;
+      el.history.innerHTML = state.history.map(item => `
+        <div class="history-item">
+          <div><strong>${escapeHtml(item.time)}</strong></div>
+          <div style="margin-top:6px">${escapeHtml(item.text)}</div>
+        </div>
+      `).join("");
+    }
 
-      for (const c of poi.Connections) {
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-        // heuristisch: match über Operator + ähnlich ID
-        if (
-          evseId.toUpperCase().includes(poi.OperatorInfo?.Name?.substring(0,3)?.toUpperCase() || "")
-        ) {
-          match = poi;
-          break;
+    function setStatus(status) {
+      const map = {
+        free: { label: "Frei", className: "badge free" },
+        busy: { label: "Belegt", className: "badge busy" },
+        unknown: { label: "Unbekannt", className: "badge unknown" }
+      };
+      const cfg = map[status] || map.unknown;
+      el.statusBadge.className = cfg.className;
+      el.statusBadge.textContent = cfg.label;
+    }
+
+    async function requestNotifications() {
+      if (!("Notification" in window)) return false;
+      if (Notification.permission === "granted") return true;
+      const permission = await Notification.requestPermission();
+      return permission === "granted";
+    }
+
+    function notify(title, body) {
+      if (!("Notification" in window)) return;
+      if (Notification.permission !== "granted") return;
+      new Notification(title, { body });
+    }
+
+    async function fetchRealStatus() {
+      if (!state.evseId) {
+        addHistory("Keine EVSE-ID eingegeben.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}?evseId=${encodeURIComponent(state.evseId)}`, {
+          method: "GET",
+          headers: { "Accept": "application/json" }
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          throw data;
         }
+
+        state.lastChecked = nowString();
+
+        setStatus(data.status || "unknown");
+        el.trackedId.textContent = data.evseId || state.evseId;
+        el.providerInfo.textContent = data.provider || "–";
+        el.locationInfo.textContent = data.locationName || "–";
+        el.providerUpdated.textContent = data.lastUpdated || "–";
+        el.lastChecked.textContent = state.lastChecked;
+        el.resultInfo.textContent = data.message || "OK";
+
+        if (state.lastStatus === "busy" && data.status === "free") {
+          notify("⚡ Charge Alert", `EVSE ${data.evseId || state.evseId} ist jetzt frei.`);
+          addHistory(`Statuswechsel erkannt: belegt → frei für ${data.evseId || state.evseId}`);
+        } else {
+          addHistory(`Status geprüft: ${data.status || "unknown"} für ${data.evseId || state.evseId}`);
+        }
+
+        state.lastStatus = data.status || "unknown";
+        saveState();
+
+      } catch (err) {
+        state.lastChecked = nowString();
+        setStatus("unknown");
+        el.lastChecked.textContent = state.lastChecked;
+
+        let errorText = "Unbekannter Fehler";
+        if (err instanceof Error) {
+          errorText = err.message;
+        } else if (err && typeof err === "object") {
+          try {
+            errorText = JSON.stringify(err, null, 2);
+          } catch {
+            errorText = "Fehlerobjekt konnte nicht gelesen werden";
+          }
+        } else {
+          errorText = String(err);
+        }
+
+        el.resultInfo.textContent = errorText;
+        addHistory("Fehler beim EVSE-Check: " + errorText);
+        console.error("EVSE Error:", err);
       }
-      if (match) break;
     }
 
-    // =========================
-    // STATUS bestimmen
-    // =========================
-    let status = "unknown";
-
-    if (match) {
-      // heuristische Ableitung
-      if (match.StatusType?.IsOperational === false) {
-        status = "unknown";
-      } else if (match.UsageType?.IsPayAtLocation === true) {
-        status = "busy"; // oft frequentiert
-      } else {
-        status = "free";
+    function stopTracking() {
+      if (state.timer) {
+        clearInterval(state.timer);
+        state.timer = null;
       }
+      state.running = false;
+      addHistory("Tracking gestoppt.");
     }
 
-    updateUI(status, evseId, match);
+    async function startTracking() {
+      const evseId = el.evseId.value.trim().toUpperCase();
+      const intervalSec = Number(el.intervalSec.value);
 
-  } catch (e) {
-    updateUI("unknown", evseId, null, "API Fehler");
-  }
-}
+      if (!evseId) {
+        alert("Bitte EVSE-ID eingeben.");
+        return;
+      }
 
-/* =========================
-   UI UPDATE
-========================= */
-function updateUI(status, id, data, msg = "") {
+      state.evseId = evseId;
+      state.intervalSec = intervalSec;
+      saveState();
 
-  let statusText = "unknown";
+      const allowed = await requestNotifications();
+      if (!allowed) {
+        addHistory("Notifications wurden nicht erlaubt. Tracking läuft trotzdem.");
+      }
 
-  if (status === "free") statusText = "✅ Frei";
-  if (status === "busy") statusText = "🚗 Belegt";
-  if (status === "unknown") statusText = "❓ Unbekannt";
+      stopTracking();
+      state.running = true;
+      addHistory(`Tracking gestartet für ${evseId} mit ${intervalSec}s Intervall.`);
+      await fetchRealStatus();
 
-  const el = document.getElementById("statusText");
+      state.timer = setInterval(fetchRealStatus, intervalSec * 1000);
+    }
 
-  el.textContent = "Status: " + statusText;
-  el.className = "status " + status;
+    function hydrateUI() {
+      el.evseId.value = state.evseId || "";
+      el.intervalSec.value = String(state.intervalSec || 30);
+      el.trackedId.textContent = state.evseId || "–";
+      el.lastChecked.textContent = state.lastChecked || "–";
+      renderHistory();
+      setStatus(state.lastStatus || "unknown");
+      el.providerInfo.textContent = "–";
+      el.locationInfo.textContent = "–";
+      el.providerUpdated.textContent = "–";
+      el.resultInfo.textContent = "–";
+    }
 
-  document.getElementById("lastCheck").textContent = new Date().toLocaleTimeString();
-
-  // Zusatzinfo
-  if (data) {
-    document.getElementById("info").textContent =
-      data.AddressInfo?.Title || "Gefunden";
-  } else {
-    document.getElementById("info").textContent =
-      msg || "Keine Daten gefunden";
-  }
-
-  // 🔔 Notification bei Statuswechsel
-  if (lastStatus === "busy" && status === "free") {
-    notify(id);
-  }
-
-  lastStatus = status;
-}
-
-/* =========================
-   NOTIFICATION
-========================= */
-function notify(id) {
-  if (Notification.permission === "granted") {
-    new Notification("⚡ Ladesäule frei", {
-      body: id + " ist jetzt verfügbar"
+    el.startBtn.addEventListener("click", startTracking);
+    el.stopBtn.addEventListener("click", stopTracking);
+    el.checkBtn.addEventListener("click", async () => {
+      state.evseId = el.evseId.value.trim().toUpperCase();
+      state.intervalSec = Number(el.intervalSec.value);
+      saveState();
+      await fetchRealStatus();
     });
-  } else {
-    Notification.requestPermission();
-  }
-}
-</script>
 
+    loadState();
+    hydrateUI();
+  </script>
 </body>
 </html>
