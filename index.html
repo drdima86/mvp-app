@@ -1,7 +1,7 @@
 
 
 export default function ChargingAvailabilityMVP() {
-  const { useEffect, useMemo, useState } = React;
+  const { useEffect, useMemo, useState } = React;
 
   const [location, setLocation] = useState("Berlin Mitte");
   const [radius, setRadius] = useState(5);
@@ -11,39 +11,39 @@ export default function ChargingAvailabilityMVP() {
   const [notifyEnabled, setNotifyEnabled] = useState(false);
   const [lastCheck, setLastCheck] = useState(null);
   const [status, setStatus] = useState("Noch kein Check ausgeführt.");
-  const [flowStep, setFlowStep] = useState(1);
-  const [watchlist, setWatchlist] = useState([]);
-  const [alerts, setAlerts] = useState([]);
-  const [activeTab, setActiveTab] = useState("home");
-  const [showFilters, setShowFilters] = useState(false);
-  const [showInstallSheet, setShowInstallSheet] = useState(false);
-  const [showTechSheet, setShowTechSheet] = useState(false);
-  const [devTab, setDevTab] = useState("manifest");
-  const [copied, setCopied] = useState("");
-  const [history, setHistory] = useState([
-    {
-      id: 1,
-      time: "07:58",
-      title: "Aral pulse Potsdamer Platz frei",
-      detail: "1 von 4 Ladepunkten verfügbar · 2,4 km",
-      channel: "Web Push",
-      type: "sent",
-    },
-  ]);
-  const [consents, setConsents] = useState({
-    location: false,
-    notifications: false,
-    backgroundHint: false,
-    installHint: false,
-  });
+  const [flowStep, setFlowStep] = useState(1);
+  const [watchlist, setWatchlist] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [activeTab, setActiveTab] = useState("home");
+  const [showFilters, setShowFilters] = useState(false);
+  const [showInstallSheet, setShowInstallSheet] = useState(false);
+  const [showTechSheet, setShowTechSheet] = useState(false);
+  const [devTab, setDevTab] = useState("manifest");
+  const [copied, setCopied] = useState("");
+  const [history, setHistory] = useState([
+    {
+      id: 1,
+      time: "07:58",
+      title: "Aral pulse Potsdamer Platz frei",
+      detail: "1 von 4 Ladepunkten verfügbar · 2,4 km",
+      channel: "Web Push",
+      type: "sent",
+    },
+  ]);
+  const [consents, setConsents] = useState({
+    location: false,
+    notifications: false,
+    backgroundHint: false,
+    installHint: false,
+  });
 
   const stations = useMemo(() => {
     const base = [
-      { id: 1, name: "IONITY Südkreuz", distance: 1.8, available: 0, total: 6, power: 350, operator: "IONITY", plug: "CCS", city: "Berlin", reliability: "hoch", eta: "6 min" },
-      { id: 2, name: "Aral pulse Potsdamer Platz", distance: 2.4, available: 1, total: 4, power: 300, operator: "Aral pulse", plug: "CCS", city: "Berlin", reliability: "hoch", eta: "8 min" },
-      { id: 3, name: "EnBW Schöneberg", distance: 3.9, available: 2, total: 8, power: 150, operator: "EnBW", plug: "CCS", city: "Berlin", reliability: "mittel", eta: "11 min" },
-      { id: 4, name: "Allego EUREF", distance: 4.5, available: 0, total: 2, power: 50, operator: "Allego", plug: "AC / CCS", city: "Berlin", reliability: "mittel", eta: "12 min" },
-      { id: 5, name: "MER Tempelhof", distance: 5.0, available: 1, total: 2, power: 400, operator: "MER", plug: "CCS", city: "Berlin", reliability: "hoch", eta: "13 min" },
+      { id: 1, name: "IONITY Südkreuz", distance: 1.8, available: 0, total: 6, power: 350, operator: "IONITY", plug: "CCS", city: "Berlin", reliability: "hoch", eta: "6 min" },
+      { id: 2, name: "Aral pulse Potsdamer Platz", distance: 2.4, available: 1, total: 4, power: 300, operator: "Aral pulse", plug: "CCS", city: "Berlin", reliability: "hoch", eta: "8 min" },
+      { id: 3, name: "EnBW Schöneberg", distance: 3.9, available: 2, total: 8, power: 150, operator: "EnBW", plug: "CCS", city: "Berlin", reliability: "mittel", eta: "11 min" },
+      { id: 4, name: "Allego EUREF", distance: 4.5, available: 0, total: 2, power: 50, operator: "Allego", plug: "AC / CCS", city: "Berlin", reliability: "mittel", eta: "12 min" },
+      { id: 5, name: "MER Tempelhof", distance: 5.0, available: 1, total: 2, power: 400, operator: "MER", plug: "CCS", city: "Berlin", reliability: "hoch", eta: "13 min" },
     ];
     return base
       .filter((s) => s.distance <= radius)
@@ -52,37 +52,37 @@ export default function ChargingAvailabilityMVP() {
   }, [radius, preferFast]);
 
   const availableNow = stations.filter((s) => s.available > 0);
-  const topMatches = availableNow.slice(0, 3);
-  const watchlistStations = watchlist.map((id) => stations.find((s) => s.id === id)).filter(Boolean);
-  const activeAlerts = alerts.filter((a) => a.active);
-  const stats = {
-    nearby: stations.length,
-    free: availableNow.length,
-    alerts: activeAlerts.length,
-  };
+  const topMatches = availableNow.slice(0, 3);
+  const watchlistStations = watchlist.map((id) => stations.find((s) => s.id === id)).filter(Boolean);
+  const activeAlerts = alerts.filter((a) => a.active);
+  const stats = {
+    nearby: stations.length,
+    free: availableNow.length,
+    alerts: activeAlerts.length,
+  };
 
-  useEffect(() => {
-    if (consents.location && consents.notifications && flowStep < 3) {
-      setFlowStep(3);
-    }
-  }, [consents, flowStep]);
+  useEffect(() => {
+    if (consents.location && consents.notifications && flowStep < 3) {
+      setFlowStep(3);
+    }
+  }, [consents, flowStep]);
 
-  const appendHistory = (entry) => {
-    setHistory((prev) => [{ id: Date.now(), ...entry }, ...prev].slice(0, 8));
-  };
+  const appendHistory = (entry) => {
+    setHistory((prev) => [{ id: Date.now(), ...entry }, ...prev].slice(0, 8));
+  };
 
-  const requestLocation = () => {
-    setConsents((prev) => ({ ...prev, location: true }));
-    setLocation("Aktueller Standort · Berlin Südkreuz");
-    setStatus("Standortfreigabe simuliert. In der echten App würde jetzt per Geolocation der Startpunkt gesetzt.");
-    setFlowStep(2);
-  };
+  const requestLocation = () => {
+    setConsents((prev) => ({ ...prev, location: true }));
+    setLocation("Aktueller Standort · Berlin Südkreuz");
+    setStatus("Standortfreigabe simuliert. In der echten App würde jetzt per Geolocation der Startpunkt gesetzt.");
+    setFlowStep(2);
+  };
 
-  const showInstallHint = () => {
-    setConsents((prev) => ({ ...prev, installHint: true }));
-    setStatus("iPhone Flow: In Safari 'Teilen' → 'Zum Home-Bildschirm'. Danach aus dem Homescreen öffnen.");
-    setShowInstallSheet(true);
-  };
+  const showInstallHint = () => {
+    setConsents((prev) => ({ ...prev, installHint: true }));
+    setStatus("iPhone Flow: In Safari 'Teilen' → 'Zum Home-Bildschirm'. Danach aus dem Homescreen öffnen.");
+    setShowInstallSheet(true);
+  };
 
 
   const runCheck = () => {
@@ -92,13 +92,13 @@ export default function ChargingAvailabilityMVP() {
     if (availableNow.length > 0) {
       const best = availableNow[0];
       setStatus(`Verfügbar: ${best.name} (${best.distance} km, ${best.available}/${best.total} frei)`);
-      appendHistory({
-        time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        title: `${best.name} geprüft`,
-        detail: `${best.available}/${best.total} frei · ${best.distance} km · ${best.power} kW`,
-        channel: channel === "webpush" ? "Web Push" : channel === "email" ? "E-Mail" : "SMS",
-        type: "check",
-      });
+      appendHistory({
+        time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        title: `${best.name} geprüft`,
+        detail: `${best.available}/${best.total} frei · ${best.distance} km · ${best.power} kW`,
+        channel: channel === "webpush" ? "Web Push" : channel === "email" ? "E-Mail" : "SMS",
+        type: "check",
+      });
 
       if (notifyEnabled) {
         if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
@@ -111,13 +111,13 @@ export default function ChargingAvailabilityMVP() {
       }
     } else {
       setStatus("Aktuell keine passende freie Ladesäule gefunden.");
-      appendHistory({
-        time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        title: "Keine freie Ladesäule gefunden",
-        detail: `Radius ${radius} km · ${preferFast ? "nur Schnellladen" : "alle Ladepunkte"}`,
-        channel: "Kein Versand",
-        type: "empty",
-      });
+      appendHistory({
+        time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        title: "Keine freie Ladesäule gefunden",
+        detail: `Radius ${radius} km · ${preferFast ? "nur Schnellladen" : "alle Ladepunkte"}`,
+        channel: "Kein Versand",
+        type: "empty",
+      });
     }
   };
 
@@ -129,182 +129,182 @@ export default function ChargingAvailabilityMVP() {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
       setNotifyEnabled(true);
-      setConsents((prev) => ({ ...prev, notifications: true, backgroundHint: true }));
+      setConsents((prev) => ({ ...prev, notifications: true, backgroundHint: true }));
       setStatus("Benachrichtigungen aktiviert. In der echten App würde jetzt zusätzlich ein Push-Subscription-Token an das Backend gesendet.");
-      setFlowStep(3);
+      setFlowStep(3);
     } else {
       setStatus("Benachrichtigungen wurden nicht erlaubt.");
     }
   };
 
-  const toggleWatch = (stationId) => {
-    setWatchlist((prev) =>
-      prev.includes(stationId) ? prev.filter((id) => id !== stationId) : [...prev, stationId]
-    );
-  };
+  const toggleWatch = (stationId) => {
+    setWatchlist((prev) =>
+      prev.includes(stationId) ? prev.filter((id) => id !== stationId) : [...prev, stationId]
+    );
+  };
 
-  const createAlert = (station) => {
-    const exists = alerts.some((a) => a.stationId === station.id);
-    if (exists) {
-      setStatus(`Alarm für ${station.name} existiert bereits.`);
-      return;
-    }
-    const newAlert = {
-      id: Date.now(),
-      stationId: station.id,
-      stationName: station.name,
-      threshold: ">0 frei",
-      intervalMin,
-      channel,
-      distance: station.distance,
-      active: true,
-    };
-    setAlerts((prev) => [newAlert, ...prev]);
-    if (!watchlist.includes(station.id)) {
-      setWatchlist((prev) => [...prev, station.id]);
-    }
-    setStatus(`Alarm gesetzt: ${station.name} wird alle ${intervalMin} min beobachtet.`);
-    appendHistory({
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      title: `Alarm erstellt für ${station.name}`,
-      detail: `Kanal: ${channel === "webpush" ? "Web Push" : channel === "email" ? "E-Mail" : "SMS"} · Intervall: ${intervalMin} min`,
-      channel: channel === "webpush" ? "Web Push" : channel === "email" ? "E-Mail" : "SMS",
-      type: "alert",
-    });
-    setFlowStep(4);
-    setActiveTab("alerts");
-  };
+  const createAlert = (station) => {
+    const exists = alerts.some((a) => a.stationId === station.id);
+    if (exists) {
+      setStatus(`Alarm für ${station.name} existiert bereits.`);
+      return;
+    }
+    const newAlert = {
+      id: Date.now(),
+      stationId: station.id,
+      stationName: station.name,
+      threshold: ">0 frei",
+      intervalMin,
+      channel,
+      distance: station.distance,
+      active: true,
+    };
+    setAlerts((prev) => [newAlert, ...prev]);
+    if (!watchlist.includes(station.id)) {
+      setWatchlist((prev) => [...prev, station.id]);
+    }
+    setStatus(`Alarm gesetzt: ${station.name} wird alle ${intervalMin} min beobachtet.`);
+    appendHistory({
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      title: `Alarm erstellt für ${station.name}`,
+      detail: `Kanal: ${channel === "webpush" ? "Web Push" : channel === "email" ? "E-Mail" : "SMS"} · Intervall: ${intervalMin} min`,
+      channel: channel === "webpush" ? "Web Push" : channel === "email" ? "E-Mail" : "SMS",
+      type: "alert",
+    });
+    setFlowStep(4);
+    setActiveTab("alerts");
+  };
 
-  const toggleAlertActive = (alertId) => {
-    setAlerts((prev) => prev.map((a) => (a.id === alertId ? { ...a, active: !a.active } : a)));
-  };
+  const toggleAlertActive = (alertId) => {
+    setAlerts((prev) => prev.map((a) => (a.id === alertId ? { ...a, active: !a.active } : a)));
+  };
 
-  const copyText = async (label, text) => {
-    try {
-      if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(text);
-        setCopied(label);
-        setTimeout(() => setCopied(""), 1500);
-      }
-    } catch (e) {}
-  };
+  const copyText = async (label, text) => {
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        setCopied(label);
+        setTimeout(() => setCopied(""), 1500);
+      }
+    } catch (e) {}
+  };
 
 
-  const manifestJson = `{
-  "name": "Charge Alert",
-  "short_name": "ChargeAlert",
-  "description": "PWA für Ladesäulen-Verfügbarkeit mit Alarmen",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0f172a",
-  "lang": "de",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  const manifestJson = `{
+  "name": "Charge Alert",
+  "short_name": "ChargeAlert",
+  "description": "PWA für Ladesäulen-Verfügbarkeit mit Alarmen",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "lang": "de",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }`;
 
 
-  const indexHtml = `<!doctype html>
+  const indexHtml = `<!doctype html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0f172a" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Charge Alert" />
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <title>Charge Alert</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Charge Alert" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <title>Charge Alert</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>`;
 
 
-  const serviceWorkerJs = `self.addEventListener("install", (event) => {
-  self.skipWaiting();
+  const serviceWorkerJs = `self.addEventListener("install", (event) => {
+  self.skipWaiting();
 });
 
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(self.clients.claim());
 });
 
 
 self.addEventListener("fetch", () => {
-  // MVP: hier später Caching-Strategie ergänzen
+  // MVP: hier später Caching-Strategie ergänzen
 });
 
 
 self.addEventListener("push", (event) => {
-  let data = { title: "Charge Alert", body: "Eine Ladesäule ist frei." };
-  try {
-    if (event.data) data = event.data.json();
-  } catch (e) {}
+  let data = { title: "Charge Alert", body: "Eine Ladesäule ist frei." };
+  try {
+    if (event.data) data = event.data.json();
+  } catch (e) {}
 
 
-  event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: "/icons/icon-192.png",
-      badge: "/icons/icon-192.png",
-    })
-  );
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: "/icons/icon-192.png",
+      badge: "/icons/icon-192.png",
+    })
+  );
 });
 
 
 self.addEventListener("notificationclick", (event) => {
-  event.notification.close();
-  event.waitUntil(clients.openWindow("/"));
+  event.notification.close();
+  event.waitUntil(clients.openWindow("/"));
 });`;
 
 
-  const mainJsx = `import React from "react";
+  const mainJsx = `import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./styles.css";
 
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/service-worker.js");
-  });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js");
+  });
 }
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );`;
 
 
-  const vercelNotes = `Projektstruktur für Vercel:
+  const vercelNotes = `Projektstruktur für Vercel:
 
 
 /public
-  /icons/icon-192.png
-  /icons/icon-512.png
-  manifest.json
-  service-worker.js
+  /icons/icon-192.png
+  /icons/icon-512.png
+  manifest.json
+  service-worker.js
 /src
-  App.jsx
-  main.jsx
-  styles.css
+  App.jsx
+  main.jsx
+  styles.css
 index.html
 package.json
 
@@ -317,408 +317,408 @@ Deployment:
 5. Auf dem iPhone in Safari öffnen und zum Home-Bildschirm hinzufügen`;
 
 
-  const techFiles = {
-    manifest: { label: "manifest.json", code: manifestJson },
-    index: { label: "index.html", code: indexHtml },
-    sw: { label: "service-worker.js", code: serviceWorkerJs },
-    main: { label: "main.jsx", code: mainJsx },
-    vercel: { label: "Vercel Notes", code: vercelNotes },
-  };
+  const techFiles = {
+    manifest: { label: "manifest.json", code: manifestJson },
+    index: { label: "index.html", code: indexHtml },
+    sw: { label: "service-worker.js", code: serviceWorkerJs },
+    main: { label: "main.jsx", code: mainJsx },
+    vercel: { label: "Vercel Notes", code: vercelNotes },
+  };
 
 
-  const NavButton = ({ id, label, icon, badge }) => {
-    const active = activeTab === id;
-    return (
-      <button
-        onClick={() => setActiveTab(id)}
-        className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 rounded-2xl transition ${active ? "bg-slate-900 text-white" : "text-slate-500"}`}
-      >
-        <div className="relative text-lg leading-none">
-          <span>{icon}</span>
-          {!!badge && <span className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-emerald-500 text-white text-[10px] flex items-center justify-center">{badge}</span>}
-        </div>
-        <span className="text-[11px] font-medium">{label}</span>
-      </button>
-    );
-  };
+  const NavButton = ({ id, label, icon, badge }) => {
+    const active = activeTab === id;
+    return (
+      <button
+        onClick={() => setActiveTab(id)}
+        className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 rounded-2xl transition ${active ? "bg-slate-900 text-white" : "text-slate-500"}`}
+      >
+        <div className="relative text-lg leading-none">
+          <span>{icon}</span>
+          {!!badge && <span className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-emerald-500 text-white text-[10px] flex items-center justify-center">{badge}</span>}
+        </div>
+        <span className="text-[11px] font-medium">{label}</span>
+      </button>
+    );
+  };
 
-  const SectionTitle = ({ title, subtitle, action }) => (
-    <div className="flex items-start justify-between gap-3">
-      <div>
-        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-        {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
-      </div>
-      {action}
-    </div>
-  );
+  const SectionTitle = ({ title, subtitle, action }) => (
+    <div className="flex items-start justify-between gap-3">
+      <div>
+        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+        {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
+      </div>
+      {action}
+    </div>
+  );
 
 
-  const Chip = ({ active, children }) => (
-    <div className={`rounded-full px-3 py-1.5 text-xs ${active ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>{children}</div>
-  );
+  const Chip = ({ active, children }) => (
+    <div className={`rounded-full px-3 py-1.5 text-xs ${active ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>{children}</div>
+  );
 
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
-      <div className="mx-auto max-w-md min-h-screen bg-white shadow-2xl relative overflow-hidden pb-[calc(env(safe-area-inset-bottom)+88px)]">
-        <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 text-white px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-6 rounded-b-[2rem]">
-          <div className="flex items-center justify-between text-[11px] opacity-90 mb-4">
-            <span>9:41</span>
-            <div className="flex items-center gap-1.5">
-              <span>5G</span>
-              <span>🔋</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-slate-100 text-slate-900">
+      <div className="mx-auto max-w-md min-h-screen bg-white shadow-2xl relative overflow-hidden pb-[calc(env(safe-area-inset-bottom)+88px)]">
+        <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 text-white px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-6 rounded-b-[2rem]">
+          <div className="flex items-center justify-between text-[11px] opacity-90 mb-4">
+            <span>9:41</span>
+            <div className="flex items-center gap-1.5">
+              <span>5G</span>
+              <span>🔋</span>
+            </div>
+          </div>
 
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start justify-between gap-3">
             <div>
-              <div className="text-xs uppercase tracking-[0.18em] text-slate-300">Charge Alert</div>
-              <h1 className="text-2xl font-bold mt-1">Ladesäulen live</h1>
-              <p className="text-sm text-slate-300 mt-1">Mobile-first MVP + PWA Paket + Vercel-ready Setup.</p>
+              <div className="text-xs uppercase tracking-[0.18em] text-slate-300">Charge Alert</div>
+              <h1 className="text-2xl font-bold mt-1">Ladesäulen live</h1>
+              <p className="text-sm text-slate-300 mt-1">Mobile-first MVP + PWA Paket + Vercel-ready Setup.</p>
             </div>
-            <div className="flex flex-col gap-2 shrink-0">
-              <button
-                onClick={() => setShowFilters((prev) => !prev)}
-                className="rounded-2xl bg-white/10 backdrop-blur px-3 py-2 text-sm border border-white/10"
-              >
-                Filter
-              </button>
-              <button
-                onClick={() => setShowTechSheet(true)}
-                className="rounded-2xl bg-white text-slate-900 px-3 py-2 text-sm font-semibold"
-              >
-                PWA
-              </button>
+            <div className="flex flex-col gap-2 shrink-0">
+              <button
+                onClick={() => setShowFilters((prev) => !prev)}
+                className="rounded-2xl bg-white/10 backdrop-blur px-3 py-2 text-sm border border-white/10"
+              >
+                Filter
+              </button>
+              <button
+                onClick={() => setShowTechSheet(true)}
+                className="rounded-2xl bg-white text-slate-900 px-3 py-2 text-sm font-semibold"
+              >
+                PWA
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-5 rounded-[1.5rem] bg-white/10 backdrop-blur border border-white/10 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <div className="text-[11px] uppercase tracking-wide text-slate-300">Live-Status</div>
+                <div className="text-sm mt-1 leading-5">{status}</div>
+              </div>
+              <button onClick={runCheck} className="shrink-0 rounded-2xl bg-white text-slate-900 px-4 py-2 text-sm font-semibold">Jetzt prüfen</button>
             </div>
           </div>
 
-          <div className="mt-5 rounded-[1.5rem] bg-white/10 backdrop-blur border border-white/10 p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <div className="text-[11px] uppercase tracking-wide text-slate-300">Live-Status</div>
-                <div className="text-sm mt-1 leading-5">{status}</div>
-              </div>
-              <button onClick={runCheck} className="shrink-0 rounded-2xl bg-white text-slate-900 px-4 py-2 text-sm font-semibold">Jetzt prüfen</button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 mt-4">
-            <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
-              <div className="text-[11px] text-slate-300">In Nähe</div>
-              <div className="text-xl font-semibold mt-1">{stats.nearby}</div>
-            </div>
-            <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
-              <div className="text-[11px] text-slate-300">Frei</div>
-              <div className="text-xl font-semibold mt-1">{stats.free}</div>
-            </div>
-            <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
-              <div className="text-[11px] text-slate-300">Alarme</div>
-              <div className="text-xl font-semibold mt-1">{stats.alerts}</div>
-            </div>
-          </div>
+          <div className="grid grid-cols-3 gap-3 mt-4">
+            <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+              <div className="text-[11px] text-slate-300">In Nähe</div>
+              <div className="text-xl font-semibold mt-1">{stats.nearby}</div>
+            </div>
+            <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+              <div className="text-[11px] text-slate-300">Frei</div>
+              <div className="text-xl font-semibold mt-1">{stats.free}</div>
+            </div>
+            <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+              <div className="text-[11px] text-slate-300">Alarme</div>
+              <div className="text-xl font-semibold mt-1">{stats.alerts}</div>
+            </div>
+          </div>
         </div>
 
-        <div className="px-4 -mt-3 space-y-4">
-          {showFilters && (
-            <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-              <SectionTitle title="Suchprofil" subtitle="Für den iPhone-Flow auf 1 Screen verdichtet." />
-              <div className="mt-4 space-y-4">
-                <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">Ort / Startpunkt</label>
-                  <input
-                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="z. B. Berlin Mitte"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <button onClick={requestLocation} className="rounded-2xl border border-slate-300 py-3 px-3 font-medium text-sm">Standort</button>
-                  <button onClick={enableNotifications} className="rounded-2xl border border-slate-300 py-3 px-3 font-medium text-sm">Push aktivieren</button>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
-                    <span>Umkreis</span>
-                    <span>{radius} km</span>
-                  </div>
-                  <input type="range" min="1" max="25" value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="w-full" />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
-                    <span>Prüfintervall</span>
-                    <span>{intervalMin} min</span>
-                  </div>
-                  <input type="range" min="1" max="15" value={intervalMin} onChange={(e) => setIntervalMin(Number(e.target.value))} className="w-full" />
-                </div>
-                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                  <button onClick={() => setPreferFast(true)} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${preferFast ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>Nur Schnellladen</button>
-                  <button onClick={() => setPreferFast(false)} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${!preferFast ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>Alle Ladepunkte</button>
-                  <button onClick={() => setChannel("webpush")} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${channel === "webpush" ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>Web Push</button>
-                  <button onClick={() => setChannel("email")} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${channel === "email" ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>E-Mail</button>
-                  <button onClick={() => setChannel("sms")} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${channel === "sms" ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>SMS</button>
-                </div>
+        <div className="px-4 -mt-3 space-y-4">
+          {showFilters && (
+            <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+              <SectionTitle title="Suchprofil" subtitle="Für den iPhone-Flow auf 1 Screen verdichtet." />
+              <div className="mt-4 space-y-4">
+                <div>
+                  <label className="block text-xs text-slate-500 mb-1.5">Ort / Startpunkt</label>
+                  <input
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="z. B. Berlin Mitte"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button onClick={requestLocation} className="rounded-2xl border border-slate-300 py-3 px-3 font-medium text-sm">Standort</button>
+                  <button onClick={enableNotifications} className="rounded-2xl border border-slate-300 py-3 px-3 font-medium text-sm">Push aktivieren</button>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+                    <span>Umkreis</span>
+                    <span>{radius} km</span>
+                  </div>
+                  <input type="range" min="1" max="25" value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="w-full" />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+                    <span>Prüfintervall</span>
+                    <span>{intervalMin} min</span>
+                  </div>
+                  <input type="range" min="1" max="15" value={intervalMin} onChange={(e) => setIntervalMin(Number(e.target.value))} className="w-full" />
+                </div>
+                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                  <button onClick={() => setPreferFast(true)} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${preferFast ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>Nur Schnellladen</button>
+                  <button onClick={() => setPreferFast(false)} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${!preferFast ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>Alle Ladepunkte</button>
+                  <button onClick={() => setChannel("webpush")} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${channel === "webpush" ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>Web Push</button>
+                  <button onClick={() => setChannel("email")} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${channel === "email" ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>E-Mail</button>
+                  <button onClick={() => setChannel("sms")} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${channel === "sms" ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}>SMS</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+
+          <div className="grid grid-cols-2 gap-3">
+            <button onClick={showInstallHint} className="rounded-[1.5rem] border border-slate-200 bg-white p-4 text-left shadow-sm">
+              <div className="text-xs uppercase tracking-wide text-slate-500">PWA</div>
+              <div className="font-semibold mt-1">Zum Home-Bildschirm</div>
+              <div className="text-sm text-slate-500 mt-1">iPhone-App-Gefühl via Safari-Install.</div>
+            </button>
+            <button onClick={() => setShowTechSheet(true)} className="rounded-[1.5rem] border border-slate-200 bg-white p-4 text-left shadow-sm">
+              <div className="text-xs uppercase tracking-wide text-slate-500">Setup</div>
+              <div className="font-semibold mt-1">Manifest & SW</div>
+              <div className="text-sm text-slate-500 mt-1">Vercel-ready Dateienset ansehen.</div>
+            </button>
+          </div>
+
+
+          {activeTab === "home" && (
+            <div className="space-y-4">
+              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <SectionTitle
+                  title="Deine nächsten Ladepunkte"
+                  subtitle={`${location} · ${lastCheck ? `zuletzt ${lastCheck.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "noch kein Live-Check"}`}
+                  action={<button onClick={() => setShowFilters((prev) => !prev)} className="text-xs font-medium text-slate-500">Bearbeiten</button>}
+                />
+                <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                  <Chip active={consents.location}>Standort {consents.location ? "ok" : "offen"}</Chip>
+                  <Chip active={consents.notifications}>Push {consents.notifications ? "ok" : "offen"}</Chip>
+                  <Chip active={consents.installHint}>Install {consents.installHint ? "gesehen" : "offen"}</Chip>
+                  <Chip active={alerts.length > 0}>Alarm {alerts.length > 0 ? "aktiv" : "offen"}</Chip>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {stations.map((s) => {
+                  const isWatched = watchlist.includes(s.id);
+                  const hasAlert = alerts.some((a) => a.stationId === s.id && a.active);
+                  return (
+                    <div key={s.id} className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-semibold leading-tight">{s.name}</h3>
+                            <span className={`text-[10px] rounded-full px-2 py-1 ${s.available > 0 ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>{s.available > 0 ? "frei" : "belegt"}</span>
+                            {hasAlert && <span className="text-[10px] rounded-full px-2 py-1 bg-blue-100 text-blue-700">Alarm</span>}
+                          </div>
+                          <div className="text-sm text-slate-500 mt-1">{s.operator} · {s.plug} · ETA {s.eta}</div>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <div className="text-sm font-semibold">{s.distance} km</div>
+                          <div className="text-xs text-slate-500">bis {s.power} kW</div>
+                        </div>
+                      </div>
+                      <div className="mt-3 rounded-2xl bg-slate-50 p-3 flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-xs text-slate-500">Verfügbarkeit</div>
+                          <div className="text-sm font-medium mt-0.5">{s.available}/{s.total} frei · Datenqualität {s.reliability}</div>
+                        </div>
+                        <button onClick={() => toggleWatch(s.id)} className={`rounded-2xl px-3 py-2 text-xs font-medium ${isWatched ? "bg-slate-900 text-white" : "bg-white border border-slate-300 text-slate-700"}`}>
+                          {isWatched ? "Gemerkt" : "Merken"}
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 mt-3">
+                        <button onClick={() => setActiveTab("map")} className="rounded-2xl border border-slate-300 py-3 text-sm font-medium">Route</button>
+                        <button onClick={() => createAlert(s)} className="rounded-2xl bg-slate-900 text-white py-3 text-sm font-medium">Alarm setzen</button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          )}
+          )}
 
 
-          <div className="grid grid-cols-2 gap-3">
-            <button onClick={showInstallHint} className="rounded-[1.5rem] border border-slate-200 bg-white p-4 text-left shadow-sm">
-              <div className="text-xs uppercase tracking-wide text-slate-500">PWA</div>
-              <div className="font-semibold mt-1">Zum Home-Bildschirm</div>
-              <div className="text-sm text-slate-500 mt-1">iPhone-App-Gefühl via Safari-Install.</div>
-            </button>
-            <button onClick={() => setShowTechSheet(true)} className="rounded-[1.5rem] border border-slate-200 bg-white p-4 text-left shadow-sm">
-              <div className="text-xs uppercase tracking-wide text-slate-500">Setup</div>
-              <div className="font-semibold mt-1">Manifest & SW</div>
-              <div className="text-sm text-slate-500 mt-1">Vercel-ready Dateienset ansehen.</div>
-            </button>
-          </div>
+          {activeTab === "map" && (
+            <div className="space-y-4">
+              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <SectionTitle title="Kartenansicht" subtitle="PWA-Anmutung mit mobilem Map-First-Placeholder." />
+                <div className="mt-4 rounded-[1.5rem] bg-gradient-to-br from-emerald-100 via-sky-100 to-slate-100 h-72 relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.08) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+                  {topMatches.map((s, idx) => (
+                    <div key={s.id} className="absolute rounded-full bg-slate-900 text-white text-[10px] px-2 py-1 shadow-lg" style={{ left: `${22 + idx * 20}%`, top: `${25 + idx * 18}%` }}>
+                      {s.available} frei
+                    </div>
+                  ))}
+                  <div className="absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600 text-white text-xs px-3 py-2 shadow-xl">Du</div>
+                </div>
+              </div>
 
-
-          {activeTab === "home" && (
-            <div className="space-y-4">
-              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-                <SectionTitle
-                  title="Deine nächsten Ladepunkte"
-                  subtitle={`${location} · ${lastCheck ? `zuletzt ${lastCheck.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "noch kein Live-Check"}`}
-                  action={<button onClick={() => setShowFilters((prev) => !prev)} className="text-xs font-medium text-slate-500">Bearbeiten</button>}
-                />
-                <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                  <Chip active={consents.location}>Standort {consents.location ? "ok" : "offen"}</Chip>
-                  <Chip active={consents.notifications}>Push {consents.notifications ? "ok" : "offen"}</Chip>
-                  <Chip active={consents.installHint}>Install {consents.installHint ? "gesehen" : "offen"}</Chip>
-                  <Chip active={alerts.length > 0}>Alarm {alerts.length > 0 ? "aktiv" : "offen"}</Chip>
-                </div>
+              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <SectionTitle title="Top-Matches" subtitle="Schneller Scan für mobile Nutzung unterwegs." />
+                <div className="mt-4 space-y-3">
+                  {topMatches.length === 0 ? (
+                    <div className="text-sm text-slate-500">Noch keine freien Treffer im Profil.</div>
+                  ) : (
+                    topMatches.map((s, idx) => (
+                      <div key={s.id} className="rounded-2xl bg-slate-50 border border-slate-200 p-4 flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-slate-500">Top {idx + 1}</div>
+                          <div className="font-semibold mt-1">{s.name}</div>
+                          <div className="text-sm text-slate-500 mt-1">{s.distance} km · {s.available}/{s.total} frei</div>
+                        </div>
+                        <button onClick={() => createAlert(s)} className="rounded-2xl bg-slate-900 text-white px-3 py-2 text-xs font-medium">Alarm</button>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
+            </div>
+          )}
 
-              <div className="space-y-3">
-                {stations.map((s) => {
-                  const isWatched = watchlist.includes(s.id);
-                  const hasAlert = alerts.some((a) => a.stationId === s.id && a.active);
-                  return (
-                    <div key={s.id} className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="font-semibold leading-tight">{s.name}</h3>
-                            <span className={`text-[10px] rounded-full px-2 py-1 ${s.available > 0 ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>{s.available > 0 ? "frei" : "belegt"}</span>
-                            {hasAlert && <span className="text-[10px] rounded-full px-2 py-1 bg-blue-100 text-blue-700">Alarm</span>}
-                          </div>
-                          <div className="text-sm text-slate-500 mt-1">{s.operator} · {s.plug} · ETA {s.eta}</div>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <div className="text-sm font-semibold">{s.distance} km</div>
-                          <div className="text-xs text-slate-500">bis {s.power} kW</div>
-                        </div>
-                      </div>
-                      <div className="mt-3 rounded-2xl bg-slate-50 p-3 flex items-center justify-between gap-3">
-                        <div>
-                          <div className="text-xs text-slate-500">Verfügbarkeit</div>
-                          <div className="text-sm font-medium mt-0.5">{s.available}/{s.total} frei · Datenqualität {s.reliability}</div>
-                        </div>
-                        <button onClick={() => toggleWatch(s.id)} className={`rounded-2xl px-3 py-2 text-xs font-medium ${isWatched ? "bg-slate-900 text-white" : "bg-white border border-slate-300 text-slate-700"}`}>
-                          {isWatched ? "Gemerkt" : "Merken"}
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 mt-3">
-                        <button onClick={() => setActiveTab("map")} className="rounded-2xl border border-slate-300 py-3 text-sm font-medium">Route</button>
-                        <button onClick={() => createAlert(s)} className="rounded-2xl bg-slate-900 text-white py-3 text-sm font-medium">Alarm setzen</button>
-                      </div>
+
+          {activeTab === "watch" && (
+            <div className="space-y-4">
+              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <SectionTitle title="Watchlist" subtitle="Deine gemerkten Ladesäulen für schnelles Wiederfinden." />
+                <div className="mt-4 space-y-3">
+                  {watchlistStations.length === 0 ? (
+                    <div className="rounded-2xl border border-dashed border-slate-300 p-5 text-sm text-slate-500">Noch keine Station vorgemerkt.</div>
+                  ) : (
+                    watchlistStations.map((s) => (
+                      <div key={s.id} className="rounded-2xl border border-slate-200 p-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <div className="font-semibold">{s.name}</div>
+                            <div className="text-sm text-slate-500 mt-1">{s.distance} km · {s.available}/{s.total} frei · {s.power} kW</div>
+                          </div>
+                          <button onClick={() => toggleWatch(s.id)} className="rounded-2xl border border-slate-300 px-3 py-2 text-xs font-medium">Entfernen</button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+
+          {activeTab === "alerts" && (
+            <div className="space-y-4">
+              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <SectionTitle title="Aktive Alarme" subtitle="Intervall, Kanal und Status direkt mobil steuerbar." />
+                <div className="mt-4 space-y-3">
+                  {alerts.length === 0 ? (
+                    <div className="rounded-2xl border border-dashed border-slate-300 p-5 text-sm text-slate-500">Noch kein Alarm angelegt.</div>
+                  ) : (
+                    alerts.map((alert) => (
+                      <div key={alert.id} className="rounded-2xl border border-slate-200 p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="font-semibold">{alert.stationName}</div>
+                            <div className="text-sm text-slate-500 mt-1">Trigger: {alert.threshold} · alle {alert.intervalMin} min</div>
+                            <div className="text-xs text-slate-500 mt-2">Kanal: {alert.channel === "webpush" ? "Web Push" : alert.channel === "email" ? "E-Mail" : "SMS"}</div>
+                          </div>
+                          <button onClick={() => toggleAlertActive(alert.id)} className={`rounded-2xl px-3 py-2 text-xs font-medium ${alert.active ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
+                            {alert.active ? "Aktiv" : "Pausiert"}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <SectionTitle title="Benachrichtigungshistorie" subtitle="Checks und Events wie in einer echten mobilen App." />
+                <div className="mt-4 space-y-3">
+                  {history.map((item) => (
+                    <div key={item.id} className="rounded-2xl bg-slate-50 border border-slate-200 p-4">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="font-medium text-sm">{item.title}</div>
+                        <span className="text-xs text-slate-500">{item.time}</span>
+                      </div>
+                      <div className="text-sm text-slate-600 mt-2">{item.detail}</div>
+                      <div className="text-xs text-slate-500 mt-2">Kanal: {item.channel}</div>
                     </div>
-                  );
-                })}
-              </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          )}
+          )}
 
 
-          {activeTab === "map" && (
-            <div className="space-y-4">
-              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-                <SectionTitle title="Kartenansicht" subtitle="PWA-Anmutung mit mobilem Map-First-Placeholder." />
-                <div className="mt-4 rounded-[1.5rem] bg-gradient-to-br from-emerald-100 via-sky-100 to-slate-100 h-72 relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.08) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-                  {topMatches.map((s, idx) => (
-                    <div key={s.id} className="absolute rounded-full bg-slate-900 text-white text-[10px] px-2 py-1 shadow-lg" style={{ left: `${22 + idx * 20}%`, top: `${25 + idx * 18}%` }}>
-                      {s.available} frei
-                    </div>
-                  ))}
-                  <div className="absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600 text-white text-xs px-3 py-2 shadow-xl">Du</div>
-                </div>
-              </div>
+          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <SectionTitle title="MVP-Logik" subtitle="Was im echten Produkt serverseitig passieren würde." />
+            <ul className="mt-4 text-sm text-slate-600 space-y-2 list-disc pl-5">
+              <li>Polling läuft im Backend, nicht nur im offenen Browser</li>
+              <li>Versand nur bei Statuswechsel von „belegt“ zu „frei“</li>
+              <li>Deduplizierung pro Nutzer / Station / Zeitfenster</li>
+              <li>Fallback auf E-Mail oder SMS für iPhone-Sonderfälle</li>
+            </ul>
+          </div>
+        </div>
 
-              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-                <SectionTitle title="Top-Matches" subtitle="Schneller Scan für mobile Nutzung unterwegs." />
-                <div className="mt-4 space-y-3">
-                  {topMatches.length === 0 ? (
-                    <div className="text-sm text-slate-500">Noch keine freien Treffer im Profil.</div>
-                  ) : (
-                    topMatches.map((s, idx) => (
-                      <div key={s.id} className="rounded-2xl bg-slate-50 border border-slate-200 p-4 flex items-center justify-between gap-3">
-                        <div>
-                          <div className="text-[10px] uppercase tracking-wide text-slate-500">Top {idx + 1}</div>
-                          <div className="font-semibold mt-1">{s.name}</div>
-                          <div className="text-sm text-slate-500 mt-1">{s.distance} km · {s.available}/{s.total} frei</div>
-                        </div>
-                        <button onClick={() => createAlert(s)} className="rounded-2xl bg-slate-900 text-white px-3 py-2 text-xs font-medium">Alarm</button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+        {showInstallSheet && (
+          <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm z-20 flex items-end">
+            <div className="w-full rounded-t-[2rem] bg-white p-5 shadow-2xl">
+              <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-4" />
+              <SectionTitle title="Auf iPhone installieren" subtitle="Damit die App wie eine native App wirkt." action={<button onClick={() => setShowInstallSheet(false)} className="text-sm text-slate-500">Schließen</button>} />
+              <ol className="mt-4 space-y-3 text-sm text-slate-600 list-decimal pl-5">
+                <li>App in Safari öffnen</li>
+                <li>Unten auf „Teilen“ tippen</li>
+                <li>„Zum Home-Bildschirm“ auswählen</li>
+                <li>Danach vom Homescreen starten</li>
+              </ol>
+              <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+                Erst nach dem Öffnen als Homescreen-App ist die PWA-Anmutung auf dem iPhone vollständig.
+              </div>
+            </div>
+          </div>
+        )}
 
 
-          {activeTab === "watch" && (
-            <div className="space-y-4">
-              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-                <SectionTitle title="Watchlist" subtitle="Deine gemerkten Ladesäulen für schnelles Wiederfinden." />
-                <div className="mt-4 space-y-3">
-                  {watchlistStations.length === 0 ? (
-                    <div className="rounded-2xl border border-dashed border-slate-300 p-5 text-sm text-slate-500">Noch keine Station vorgemerkt.</div>
-                  ) : (
-                    watchlistStations.map((s) => (
-                      <div key={s.id} className="rounded-2xl border border-slate-200 p-4">
-                        <div className="flex items-center justify-between gap-3">
-                          <div>
-                            <div className="font-semibold">{s.name}</div>
-                            <div className="text-sm text-slate-500 mt-1">{s.distance} km · {s.available}/{s.total} frei · {s.power} kW</div>
-                          </div>
-                          <button onClick={() => toggleWatch(s.id)} className="rounded-2xl border border-slate-300 px-3 py-2 text-xs font-medium">Entfernen</button>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+        {showTechSheet && (
+          <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-sm z-20 flex items-end">
+            <div className="w-full max-h-[88vh] rounded-t-[2rem] bg-white p-5 shadow-2xl overflow-hidden flex flex-col">
+              <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-4" />
+              <SectionTitle
+                title="PWA + Vercel Paket"
+                subtitle="Manifest, Service Worker und Deployment-Setup direkt aus dem MVP heraus."
+                action={<button onClick={() => setShowTechSheet(false)} className="text-sm text-slate-500">Schließen</button>}
+              />
 
 
-          {activeTab === "alerts" && (
-            <div className="space-y-4">
-              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-                <SectionTitle title="Aktive Alarme" subtitle="Intervall, Kanal und Status direkt mobil steuerbar." />
-                <div className="mt-4 space-y-3">
-                  {alerts.length === 0 ? (
-                    <div className="rounded-2xl border border-dashed border-slate-300 p-5 text-sm text-slate-500">Noch kein Alarm angelegt.</div>
-                  ) : (
-                    alerts.map((alert) => (
-                      <div key={alert.id} className="rounded-2xl border border-slate-200 p-4">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <div className="font-semibold">{alert.stationName}</div>
-                            <div className="text-sm text-slate-500 mt-1">Trigger: {alert.threshold} · alle {alert.intervalMin} min</div>
-                            <div className="text-xs text-slate-500 mt-2">Kanal: {alert.channel === "webpush" ? "Web Push" : alert.channel === "email" ? "E-Mail" : "SMS"}</div>
-                          </div>
-                          <button onClick={() => toggleAlertActive(alert.id)} className={`rounded-2xl px-3 py-2 text-xs font-medium ${alert.active ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
-                            {alert.active ? "Aktiv" : "Pausiert"}
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-                <SectionTitle title="Benachrichtigungshistorie" subtitle="Checks und Events wie in einer echten mobilen App." />
-                <div className="mt-4 space-y-3">
-                  {history.map((item) => (
-                    <div key={item.id} className="rounded-2xl bg-slate-50 border border-slate-200 p-4">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="font-medium text-sm">{item.title}</div>
-                        <span className="text-xs text-slate-500">{item.time}</span>
-                      </div>
-                      <div className="text-sm text-slate-600 mt-2">{item.detail}</div>
-                      <div className="text-xs text-slate-500 mt-2">Kanal: {item.channel}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+              <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                {Object.entries(techFiles).map(([key, file]) => (
+                  <button
+                    key={key}
+                    onClick={() => setDevTab(key)}
+                    className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${devTab === key ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}
+                  >
+                    {file.label}
+                  </button>
+                ))}
+              </div>
 
 
-          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <SectionTitle title="MVP-Logik" subtitle="Was im echten Produkt serverseitig passieren würde." />
-            <ul className="mt-4 text-sm text-slate-600 space-y-2 list-disc pl-5">
-              <li>Polling läuft im Backend, nicht nur im offenen Browser</li>
-              <li>Versand nur bei Statuswechsel von „belegt“ zu „frei“</li>
-              <li>Deduplizierung pro Nutzer / Station / Zeitfenster</li>
-              <li>Fallback auf E-Mail oder SMS für iPhone-Sonderfälle</li>
-            </ul>
-          </div>
-        </div>
-
-        {showInstallSheet && (
-          <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm z-20 flex items-end">
-            <div className="w-full rounded-t-[2rem] bg-white p-5 shadow-2xl">
-              <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-4" />
-              <SectionTitle title="Auf iPhone installieren" subtitle="Damit die App wie eine native App wirkt." action={<button onClick={() => setShowInstallSheet(false)} className="text-sm text-slate-500">Schließen</button>} />
-              <ol className="mt-4 space-y-3 text-sm text-slate-600 list-decimal pl-5">
-                <li>App in Safari öffnen</li>
-                <li>Unten auf „Teilen“ tippen</li>
-                <li>„Zum Home-Bildschirm“ auswählen</li>
-                <li>Danach vom Homescreen starten</li>
-              </ol>
-              <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-                Erst nach dem Öffnen als Homescreen-App ist die PWA-Anmutung auf dem iPhone vollständig.
-              </div>
-            </div>
-          </div>
-        )}
+              <div className="mt-4 rounded-2xl bg-slate-950 text-slate-100 overflow-hidden flex-1 min-h-0">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+                  <div className="text-sm font-medium">{techFiles[devTab].label}</div>
+                  <button
+                    onClick={() => copyText(techFiles[devTab].label, techFiles[devTab].code)}
+                    className="rounded-xl bg-white/10 px-3 py-1.5 text-xs"
+                  >
+                    {copied === techFiles[devTab].label ? "Kopiert" : "Kopieren"}
+                  </button>
+                </div>
+                <pre className="p-4 text-[12px] leading-5 overflow-auto h-full whitespace-pre-wrap">{techFiles[devTab].code}</pre>
+              </div>
+            </div>
+          </div>
+        )}
 
 
-        {showTechSheet && (
-          <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-sm z-20 flex items-end">
-            <div className="w-full max-h-[88vh] rounded-t-[2rem] bg-white p-5 shadow-2xl overflow-hidden flex flex-col">
-              <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-4" />
-              <SectionTitle
-                title="PWA + Vercel Paket"
-                subtitle="Manifest, Service Worker und Deployment-Setup direkt aus dem MVP heraus."
-                action={<button onClick={() => setShowTechSheet(false)} className="text-sm text-slate-500">Schließen</button>}
-              />
-
-
-              <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                {Object.entries(techFiles).map(([key, file]) => (
-                  <button
-                    key={key}
-                    onClick={() => setDevTab(key)}
-                    className={`whitespace-nowrap rounded-full px-3 py-2 text-xs border ${devTab === key ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-300 text-slate-600"}`}
-                  >
-                    {file.label}
-                  </button>
-                ))}
-              </div>
-
-
-              <div className="mt-4 rounded-2xl bg-slate-950 text-slate-100 overflow-hidden flex-1 min-h-0">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-                  <div className="text-sm font-medium">{techFiles[devTab].label}</div>
-                  <button
-                    onClick={() => copyText(techFiles[devTab].label, techFiles[devTab].code)}
-                    className="rounded-xl bg-white/10 px-3 py-1.5 text-xs"
-                  >
-                    {copied === techFiles[devTab].label ? "Kopiert" : "Kopieren"}
-                  </button>
-                </div>
-                <pre className="p-4 text-[12px] leading-5 overflow-auto h-full whitespace-pre-wrap">{techFiles[devTab].code}</pre>
-              </div>
-            </div>
-          </div>
-        )}
-
-
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 bg-gradient-to-t from-white via-white to-white/80 backdrop-blur">
-          <div className="rounded-[1.75rem] border border-slate-200 bg-white shadow-lg p-2 flex items-center gap-1">
-            <NavButton id="home" label="Home" icon="⚡" badge={stats.free} />
-            <NavButton id="map" label="Karte" icon="🗺️" />
-            <NavButton id="watch" label="Watch" icon="⭐" badge={watchlist.length || 0} />
-            <NavButton id="alerts" label="Alarme" icon="🔔" badge={activeAlerts.length || 0} />
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 bg-gradient-to-t from-white via-white to-white/80 backdrop-blur">
+          <div className="rounded-[1.75rem] border border-slate-200 bg-white shadow-lg p-2 flex items-center gap-1">
+            <NavButton id="home" label="Home" icon="⚡" badge={stats.free} />
+            <NavButton id="map" label="Karte" icon="🗺️" />
+            <NavButton id="watch" label="Watch" icon="⭐" badge={watchlist.length || 0} />
+            <NavButton id="alerts" label="Alarme" icon="🔔" badge={activeAlerts.length || 0} />
           </div>
         </div>
       </div>
