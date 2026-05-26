@@ -148,3 +148,1100 @@
     }
 
     .hero-title {
+      font-size: 1.65rem;
+      margin-bottom: 8px;
+    }
+
+    .hero-copy {
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0 0 16px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      border-color: transparent;
+    }
+
+    .btn.success {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      border-color: transparent;
+    }
+
+    .btn.danger {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      border-color: transparent;
+    }
+
+    .btn.small {
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .stat-label {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      background: var(--chip);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .toolbar input,
+    .toolbar select {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    .toolbar .field {
+      flex: 1 1 220px;
+    }
+
+    .map-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    #map {
+      width: 100%;
+      min-height: 520px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #0b1220;
+    }
+
+    .leaflet-container {
+      background: #0b1220;
+    }
+
+    .list-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .station-list {
+      display: grid;
+      gap: 12px;
+      max-height: 520px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .station {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .station-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .station-title {
+      margin: 0;
+      font-size: 1.02rem;
+    }
+
+    .station-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status {
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .status.free {
+      background: rgba(34, 197, 94, 0.12);
+      color: #b8f7cb;
+      border-color: rgba(34, 197, 94, 0.24);
+    }
+
+    .status.busy {
+      background: rgba(239, 68, 68, 0.12);
+      color: #ffc5c5;
+      border-color: rgba(239, 68, 68, 0.24);
+    }
+
+    .status.unknown {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fde3b0;
+      border-color: rgba(245, 158, 11, 0.24);
+    }
+
+    .station-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hint-box {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.18);
+      border-radius: 16px;
+      padding: 14px;
+      color: #dbeafe;
+      line-height: 1.45;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .history-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      padding: 12px 14px;
+      font-size: 0.93rem;
+      line-height: 1.45;
+    }
+
+    .muted-note {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      background: rgba(8, 16, 29, 0.92);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: center;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .bottom-nav-inner {
+      width: 100%;
+      max-width: 640px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .nav-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      background: rgba(59, 130, 246, 0.18);
+      border-color: rgba(59, 130, 246, 0.35);
+    }
+
+    .nav-icon {
+      font-size: 1.1rem;
+    }
+
+    .nav-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-align: center;
+    }
+
+    .popup-status {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .popup-status.free {
+      background: rgba(34, 197, 94, 0.15);
+      color: #14532d;
+    }
+
+    .popup-status.busy {
+      background: rgba(239, 68, 68, 0.15);
+      color: #7f1d1d;
+    }
+
+    .popup-status.unknown {
+      background: rgba(245, 158, 11, 0.15);
+      color: #78350f;
+    }
+
+    @media (max-width: 980px) {
+      .grid.hero {
+        grid-template-columns: 1fr;
+      }
+
+      .map-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .station-list {
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat-value {
+        font-size: 1.25rem;
+      }
+
+      #map {
+        min-height: 360px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">⚡</div>
+        <div>
+          <h1>Charge Alert</h1>
+          <p>MVP mit echter Leaflet-Karte · V3</p>
+        </div>
+      </div>
+      <div class="badge" id="pollingBadge">● Live-Simulation aktiv</div>
+    </header>
+
+    <main>
+      <section id="screen-home" class="screen active">
+        <div class="grid hero">
+          <div class="card">
+            <h2 class="hero-title">Ladepunkte live beobachten – jetzt mit echter Karte</h2>
+            <p class="hero-copy">
+              Diese Version nutzt Leaflet für eine interaktive Karte, Marker pro Station,
+              Filterung, Watchlist und eine Alert-Historie. Die Daten bleiben MVP-like lokal
+              im Browser und der Status wird realistisch simuliert.
+            </p>
+
+            <div class="actions">
+              <button class="btn primary" id="refreshNowBtn">Jetzt prüfen</button>
+              <button class="btn" id="goMapBtn">Zur Karte</button>
+              <button class="btn" id="fitMapBtn">Alle Stationen anzeigen</button>
+            </div>
+
+            <div class="chips">
+              <div class="chip">Leaflet</div>
+              <div class="chip">OpenStreetMap Tiles</div>
+              <div class="chip">Marker-Statusfarben</div>
+              <div class="chip">Watchlist</div>
+              <div class="chip">Alert-Historie</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h3>Live Status</h3>
+              <span class="subtle" id="lastUpdatedLabel">Noch kein Check</span>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-label">Stationen</div>
+                <div class="stat-value" id="statStations">0</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Frei</div>
+                <div class="stat-value" id="statFree">0</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Watchlist</div>
+                <div class="stat-value" id="statWatch">0</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Alerts</div>
+                <div class="stat-value" id="statAlerts">0</div>
+              </div>
+            </div>
+
+            <div class="hint-box" style="margin-top: 14px;">
+              Alert-Logik im MVP: Für beobachtete Stationen wird ein Alert erzeugt,
+              wenn sich der Status von <strong>belegt</strong> auf <strong>frei</strong> ändert.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top: 16px;">
+          <div class="card">
+            <div class="section-title">
+              <h3>Nächste Stationen</h3>
+              <button class="btn small" id="openAllStationsBtn">In Karte öffnen</button>
+            </div>
+            <div id="homeStations" class="station-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-map" class="screen">
+        <div class="card">
+          <div class="section-title">
+            <h2>Karte & Stationen</h2>
+            <span class="subtle">Echte Interaktion mit Marker-Fokus</span>
+          </div>
+
+          <div class="toolbar">
+            <div class="field">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Suche nach Name, Bereich oder Steckertyp..."
+              />
+            </div>
+            <div class="field">
+              <select id="statusFilter">
+                <option value="all">Alle Status</option>
+                <option value="free">Nur frei</option>
+                <option value="busy">Nur belegt</option>
+                <option value="unknown">Nur unbekannt</option>
+              </select>
+            </div>
+            <div>
+              <button class="btn primary small" id="simulateBtn">Status simulieren</button>
+            </div>
+          </div>
+
+          <div class="map-layout">
+            <div id="map"></div>
+            <div class="list-panel">
+              <div class="hint-box">
+                Klicke in der Liste auf „Auf Karte“, um zur Station zu springen,
+                oder direkt auf Marker in der Karte.
+              </div>
+              <div id="stationList" class="station-list"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-watchlist" class="screen">
+        <div class="card">
+          <div class="section-title">
+            <h2>Watchlist</h2>
+            <button class="btn danger small" id="clearWatchlistBtn">Watchlist leeren</button>
+          </div>
+          <div id="watchlistContainer"></div>
+        </div>
+      </section>
+
+      <section id="screen-alerts" class="screen">
+        <div class="card">
+          <div class="section-title">
+            <h2>Alert-Historie</h2>
+            <button class="btn danger small" id="clearAlertsBtn">Alerts löschen</button>
+          </div>
+          <div class="muted-note" style="margin-bottom: 12px;">
+            Alerts werden erzeugt, wenn eine beobachtete Station von „belegt“ auf „frei“ wechselt.
+          </div>
+          <div id="alertHistory" class="history-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="footer-note">
+      Charge Alert MVP · Leaflet + OpenStreetMap · Standalone HTML/CSS/JS
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <button class="nav-btn active" data-screen="home">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-btn" data-screen="map">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-label">Karte</span>
+      </button>
+      <button class="nav-btn" data-screen="watchlist">
+        <span class="nav-icon">⭐</span>
+        <span class="nav-label">Watch</span>
+      </button>
+      <button class="nav-btn" data-screen="alerts">
+        <span class="nav-icon">🔔</span>
+        <span class="nav-label">Alerts</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    (function () {
+      const STORAGE_KEYS = {
+        stations: "chargeAlertLeafletStationsV3",
+        watchlist: "chargeAlertLeafletWatchlistV3",
+        alerts: "chargeAlertLeafletAlertsV3",
+        updatedAt: "chargeAlertLeafletUpdatedAtV3"
+      };
+
+      const initialStations = [
+        {
+          id: "berlin-mitte-01",
+          name: "Berlin Mitte Hub",
+          area: "Berlin Mitte",
+          plugs: "CCS / AC",
+          distanceKm: 0.8,
+          status: "busy",
+          power: "150 kW",
+          lat: 52.5208,
+          lng: 13.4095
+        },
+        {
+          id: "kreuzberg-02",
+          name: "Kreuzberg Fast Charge",
+          area: "Kreuzberg",
+          plugs: "CCS",
+          distanceKm: 1.6,
+          status: "free",
+          power: "300 kW",
+          lat: 52.4987,
+          lng: 13.4033
+        },
+        {
+          id: "friedrichshain-03",
+          name: "Friedrichshain Ring",
+          area: "Friedrichshain",
+          plugs: "CCS / Typ 2",
+          distanceKm: 2.9,
+          status: "busy",
+          power: "75 kW",
+          lat: 52.5148,
+          lng: 13.4546
+        },
+        {
+          id: "charlottenburg-04",
+          name: "Charlottenburg Plaza",
+          area: "Charlottenburg",
+          plugs: "Typ 2",
+          distanceKm: 4.1,
+          status: "unknown",
+          power: "22 kW",
+          lat: 52.5085,
+          lng: 13.3049
+        },
+        {
+          id: "neukoelln-05",
+          name: "Neukölln Süd Station",
+          area: "Neukölln",
+          plugs: "CCS / AC",
+          distanceKm: 5.3,
+          status: "busy",
+          power: "120 kW",
+          lat: 52.4715,
+          lng: 13.4314
+        }
+      ];
+
+      function load(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch {
+          return fallback;
+        }
+      }
+
+      function save(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      function nowString() {
+        return new Date().toLocaleString("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        });
+      }
+
+      function setUpdatedNow() {
+        state.updatedAt = nowString();
+        localStorage.setItem(STORAGE_KEYS.updatedAt, state.updatedAt);
+      }
+
+      function cryptoRandomId() {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        return "id-" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      }
+
+      const state = {
+        stations: load(STORAGE_KEYS.stations, initialStations),
+        watchlist: load(STORAGE_KEYS.watchlist, []),
+        alerts: load(STORAGE_KEYS.alerts, []),
+        updatedAt: localStorage.getItem(STORAGE_KEYS.updatedAt) || null
+      };
+
+      const el = {
+        statStations: document.getElementById("statStations"),
+        statFree: document.getElementById("statFree"),
+        statWatch: document.getElementById("statWatch"),
+        statAlerts: document.getElementById("statAlerts"),
+        lastUpdatedLabel: document.getElementById("lastUpdatedLabel"),
+        pollingBadge: document.getElementById("pollingBadge"),
+        stationList: document.getElementById("stationList"),
+        homeStations: document.getElementById("homeStations"),
+        watchlistContainer: document.getElementById("watchlistContainer"),
+        alertHistory: document.getElementById("alertHistory"),
+        searchInput: document.getElementById("searchInput"),
+        statusFilter: document.getElementById("statusFilter")
+      };
+
+      let map;
+      const markers = new Map();
+
+      function isWatched(id) {
+        return state.watchlist.includes(id);
+      }
+
+      function toggleWatch(id) {
+        if (isWatched(id)) {
+          state.watchlist = state.watchlist.filter(x => x !== id);
+        } else {
+          state.watchlist.push(id);
+        }
+        save(STORAGE_KEYS.watchlist, state.watchlist);
+        render();
+      }
+
+      function addAlert(station, previousStatus, newStatus) {
+        const entry = {
+          id: cryptoRandomId(),
+          stationId: station.id,
+          stationName: station.name,
+          area: station.area,
+          previousStatus,
+          newStatus,
+          createdAt: nowString()
+        };
+        state.alerts.unshift(entry);
+        state.alerts = state.alerts.slice(0, 50);
+        save(STORAGE_KEYS.alerts, state.alerts);
+      }
+
+      function statusLabel(status) {
+        if (status === "free") return "Frei";
+        if (status === "busy") return "Belegt";
+        return "Unbekannt";
+      }
+
+      function statusClass(status) {
+        if (status === "free") return "status free";
+        if (status === "busy") return "status busy";
+        return "status unknown";
+      }
+
+      function markerColor(status) {
+        if (status === "free") return "#22c55e";
+        if (status === "busy") return "#ef4444";
+        return "#f59e0b";
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function toast(message) {
+        el.pollingBadge.textContent = "● " + message;
+        setTimeout(() => {
+          el.pollingBadge.textContent = "● Live-Simulation aktiv";
+        }, 1800);
+      }
+
+      function simulateStatusTick() {
+        const next = state.stations.map(station => {
+          const previous = station.status;
+          let newStatus = previous;
+          const r = Math.random();
+
+          if (previous === "busy") {
+            if (r < 0.30) newStatus = "free";
+            else if (r < 0.36) newStatus = "unknown";
+          } else if (previous === "free") {
+            if (r < 0.28) newStatus = "busy";
+            else if (r < 0.34) newStatus = "unknown";
+          } else {
+            if (r < 0.45) newStatus = "busy";
+            else if (r < 0.75) newStatus = "free";
+          }
+
+          const updated = { ...station, status: newStatus };
+
+          if (isWatched(station.id) && previous === "busy" && newStatus === "free") {
+            addAlert(updated, previous, newStatus);
+          }
+
+          return updated;
+        });
+
+        state.stations = next;
+        save(STORAGE_KEYS.stations, state.stations);
+        setUpdatedNow();
+        render();
+      }
+
+      function refreshNow() {
+        simulateStatusTick();
+        toast("Status aktualisiert");
+      }
+
+      function filteredStations() {
+        const q = (el.searchInput?.value || "").trim().toLowerCase();
+        const status = el.statusFilter?.value || "all";
+
+        return state.stations
+          .filter(s => {
+            const matchesQuery =
+              !q ||
+              s.name.toLowerCase().includes(q) ||
+              s.area.toLowerCase().includes(q) ||
+              s.plugs.toLowerCase().includes(q) ||
+              s.power.toLowerCase().includes(q);
+
+            const matchesStatus = status === "all" ? true : s.status === status;
+            return matchesQuery && matchesStatus;
+          })
+          .sort((a, b) => a.distanceKm - b.distanceKm);
+      }
+
+      function stationCard(station, includeMapButton = true) {
+        const watched = isWatched(station.id);
+        return `
+          <article class="station">
+            <div class="station-top">
+              <div>
+                <h3 class="station-title">${escapeHtml(station.name)}</h3>
+                <div class="station-meta">
+                  <span>${escapeHtml(station.area)}</span>
+                  <span>•</span>
+                  <span>${station.distanceKm.toFixed(1)} km</span>
+                  <span>•</span>
+                  <span>${escapeHtml(station.plugs)}</span>
+                  <span>•</span>
+                  <span>${escapeHtml(station.power)}</span>
+                </div>
+              </div>
+              <div class="${statusClass(station.status)}">${statusLabel(station.status)}</div>
+            </div>
+
+            <div class="station-actions">
+              <button class="btn small ${watched ? "danger" : "success"}" data-watch="${station.id}">
+                ${watched ? "Nicht mehr beobachten" : "Beobachten"}
+              </button>
+              ${includeMapButton ? `
+                <button class="btn small" data-focus="${station.id}">
+                  Auf Karte
+                </button>
+              ` : ""}
+              <button class="btn small" data-detail="${station.id}">
+                Details
+              </button>
+            </div>
+          </article>
+        `;
+      }
+
+      function popupHtml(station) {
+        return `
+          <div style="min-width:200px;">
+            <strong>${escapeHtml(station.name)}</strong><br/>
+            <span>${escapeHtml(station.area)}</span><br/>
+            <span>${escapeHtml(station.plugs)} · ${escapeHtml(station.power)}</span><br/>
+            <span class="popup-status ${station.status}">${statusLabel(station.status)}</span>
+          </div>
+        `;
+      }
+
+      function createIcon(status) {
+        const color = markerColor(status);
+        return L.divIcon({
+          className: "",
+          html: `
+            <div style="
+              width:18px;
+              height:18px;
+              border-radius:50%;
+              background:${color};
+              border:3px solid white;
+              box-shadow:0 0 0 3px rgba(0,0,0,.2);
+            "></div>
+          `,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+          popupAnchor: [0, -8]
+        });
+      }
+
+      function ensureMap() {
+        if (map) return;
+
+        map = L.map("map", {
+          center: [52.5200, 13.4050],
+          zoom: 12
+        });
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        setTimeout(() => {
+          map.invalidateSize();
+          fitMapToStations();
+        }, 50);
+      }
+
+      function updateMarkers() {
+        ensureMap();
+
+        const visibleIds = new Set(filteredStations().map(s => s.id));
+
+        // delete hidden markers
+        markers.forEach((marker, id) => {
+          if (!visibleIds.has(id)) {
+            map.removeLayer(marker);
+            markers.delete(id);
+          }
+        });
+
+        // add/update visible markers
+        filteredStations().forEach(station => {
+          const existing = markers.get(station.id);
+
+          if (existing) {
+            existing.setLatLng([station.lat, station.lng]);
+            existing.setIcon(createIcon(station.status));
+            existing.setPopupContent(popupHtml(station));
+          } else {
+            const marker = L.marker([station.lat, station.lng], {
+              icon: createIcon(station.status)
+            })
+              .addTo(map)
+              .bindPopup(popupHtml(station));
+
+            marker.on("click", () => {
+              switchScreen("map");
+            });
+
+            markers.set(station.id, marker);
+          }
+        });
+      }
+
+      function fitMapToStations() {
+        ensureMap();
+        const stations = filteredStations();
+        if (!stations.length) return;
+
+        const bounds = L.latLngBounds(
+          stations.map(s => [s.lat, s.lng])
+        );
+        map.fitBounds(bounds, { padding: [30, 30] });
+      }
+
+      function focusStation(id) {
+        ensureMap();
+        const station = state.stations.find(s => s.id === id);
+        const marker = markers.get(id);
+        if (!station) return;
+
+        switchScreen("map");
+        setTimeout(() => {
+          map.setView([station.lat, station.lng], 14, { animate: true });
+          if (marker) marker.openPopup();
+        }, 50);
+      }
+
+      function renderHomeStations() {
+        const top = [...state.stations]
+          .sort((a, b) => a.distanceKm - b.distanceKm)
+          .slice(0, 3);
+
+        el.homeStations.innerHTML = top.map(s => stationCard(s, true)).join("");
+      }
+
+      function renderStations() {
+        const list = filteredStations();
+        el.stationList.innerHTML = list.length
+          ? list.map(s => stationCard(s, true)).join("")
+          : '<div class="empty">Keine Stationen für den aktuellen Filter gefunden.</div>';
+
+        updateMarkers();
+      }
+
+      function renderWatchlist() {
+        const items = state.stations.filter(s => isWatched(s.id));
+        el.watchlistContainer.innerHTML = items.length
+          ? `<div class="station-list">${items.map(s => stationCard(s, true)).join("")}</div>`
+          : '<div class="empty">Noch keine Station in der Watchlist. Füge in „Karte“ eine Station hinzu.</div>';
+      }
+
+      function renderAlerts() {
+        el.alertHistory.innerHTML = state.alerts.length
+          ? state.alerts.map(a => `
+              <div class="history-item">
+                <strong>${escapeHtml(a.stationName)}</strong> in ${escapeHtml(a.area)}:
+                Statuswechsel von <strong>${statusLabel(a.previousStatus)}</strong> zu
+                <strong>${statusLabel(a.newStatus)}</strong>.
+                <div class="muted-note" style="margin-top:6px;">${escapeHtml(a.createdAt)}</div>
+              </div>
+            `).join("")
+          : '<div class="empty">Noch keine Alerts vorhanden.</div>';
+      }
+
+      function renderStats() {
+        const freeCount = state.stations.filter(s => s.status === "free").length;
+        el.statStations.textContent = String(state.stations.length);
+        el.statFree.textContent = String(freeCount);
+        el.statWatch.textContent = String(state.watchlist.length);
+        el.statAlerts.textContent = String(state.alerts.length);
+        el.lastUpdatedLabel.textContent = state.updatedAt ? `Letztes Update: ${state.updatedAt}` : "Noch kein Check";
+      }
+
+      function bindDynamicActions() {
+        document.querySelectorAll("[data-watch]").forEach(btn => {
+          btn.onclick = () => toggleWatch(btn.getAttribute("data-watch"));
+        });
+
+        document.querySelectorAll("[data-focus]").forEach(btn => {
+          btn.onclick = () => focusStation(btn.getAttribute("data-focus"));
+        });
+
+        document.querySelectorAll("[data-detail]").forEach(btn => {
+          btn.onclick = () => {
+            const station = state.stations.find(s => s.id === btn.getAttribute("data-detail"));
+            if (!station) return;
+            alert(
+              `${station.name}\n` +
+              `Bereich: ${station.area}\n` +
+              `Distanz: ${station.distanceKm.toFixed(1)} km\n` +
+              `Stecker: ${station.plugs}\n` +
+              `Leistung: ${station.power}\n` +
+              `Status: ${statusLabel(station.status)}\n` +
+              `Koordinaten: ${station.lat}, ${station.lng}`
+            );
+          };
+        });
+      }
+
+      function render() {
+        renderStats();
+        renderHomeStations();
+        renderStations();
+        renderWatchlist();
+        renderAlerts();
+        bindDynamicActions();
+      }
+
+      function switchScreen(name) {
+        document.querySelectorAll(".screen").forEach(screen => {
+          screen.classList.toggle("active", screen.id === `screen-${name}`);
+        });
+
+        document.querySelectorAll(".nav-btn").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-screen") === name);
+        });
+
+        if (name === "map") {
+          ensureMap();
+          setTimeout(() => {
+            map.invalidateSize();
+            updateMarkers();
+          }, 50);
+        }
+      }
+
+      // static nav
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.addEventListener("click", () => switchScreen(btn.getAttribute("data-screen")));
+      });
+
+      // top actions
+      document.getElementById("refreshNowBtn").addEventListener("click", refreshNow);
+      document.getElementById("simulateBtn").addEventListener("click", refreshNow);
+      document.getElementById("goMapBtn").addEventListener("click", () => switchScreen("map"));
+      document.getElementById("openAllStationsBtn").addEventListener("click", () => switchScreen("map"));
+      document.getElementById("fitMapBtn").addEventListener("click", () => {
+        switchScreen("map");
+        setTimeout(() => fitMapToStations(), 60);
+      });
+
+      // filters
+      el.searchInput.addEventListener("input", renderStations);
+      el.statusFilter.addEventListener("change", renderStations);
+
+      // clear actions
+      document.getElementById("clearWatchlistBtn").addEventListener("click", () => {
+        state.watchlist = [];
+        save(STORAGE_KEYS.watchlist, state.watchlist);
+        render();
+        toast("Watchlist geleert");
+      });
+
+      document.getElementById("clearAlertsBtn").addEventListener("click", () => {
+        state.alerts = [];
+        save(STORAGE_KEYS.alerts, state.alerts);
+        render();
+        toast("Alerts gelöscht");
+      });
+
+      // initial state
+      if (!state.updatedAt) {
+        setUpdatedNow();
+        save(STORAGE_KEYS.stations, state.stations);
+      }
+
+      render();
+      ensureMap();
+      updateMarkers();
+      fitMapToStations();
+
+      // polling simulation
+      setInterval(() => {
+        simulateStatusTick();
+      }, 12000);
+    })();
+  </script>
+</body>
+</html>
