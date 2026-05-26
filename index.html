@@ -14,7 +14,7 @@
     content="Charge Alert MVP – echte Kartenintegration mit Leaflet, Watchlist und Alert-Historie."
   />
 
-  <!-- Leaflet via offizieller CDN-Variante -->
+  <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -43,7 +43,6 @@
       --chip: #1f2b42;
       --shadow: 0 10px 30px rgba(0,0,0,0.25);
       --radius: 18px;
-      --radius-sm: 12px;
       --max: 1180px;
       --bottom-nav-h: 78px;
     }
@@ -534,7 +533,7 @@
         <div class="logo">⚡</div>
         <div>
           <h1>Charge Alert</h1>
-          <p>MVP mit echter Leaflet-Karte · V3</p>
+          <p>MVP mit echter Leaflet-Karte</p>
         </div>
       </div>
       <div class="badge" id="pollingBadge">● Live-Simulation aktiv</div>
@@ -544,11 +543,10 @@
       <section id="screen-home" class="screen active">
         <div class="grid hero">
           <div class="card">
-            <h2 class="hero-title">Ladepunkte live beobachten – jetzt mit echter Karte</h2>
+            <h2 class="hero-title">Ladepunkte live beobachten</h2>
             <p class="hero-copy">
-              Diese Version nutzt Leaflet für eine interaktive Karte, Marker pro Station,
-              Filterung, Watchlist und eine Alert-Historie. Die Daten bleiben MVP-like lokal
-              im Browser und der Status wird realistisch simuliert.
+              Diese Version zeigt echte Kartenmarker für Ladesäulen, bietet eine Watchlist
+              und erzeugt Alerts, wenn beobachtete Ladepunkte frei werden.
             </p>
 
             <div class="actions">
@@ -559,10 +557,10 @@
 
             <div class="chips">
               <div class="chip">Leaflet</div>
-              <div class="chip">OpenStreetMap Tiles</div>
-              <div class="chip">Marker-Statusfarben</div>
+              <div class="chip">OpenStreetMap</div>
               <div class="chip">Watchlist</div>
-              <div class="chip">Alert-Historie</div>
+              <div class="chip">Alerts</div>
+              <div class="chip">No Build Step</div>
             </div>
           </div>
 
@@ -592,8 +590,8 @@
             </div>
 
             <div class="hint-box" style="margin-top: 14px;">
-              Alert-Logik im MVP: Für beobachtete Stationen wird ein Alert erzeugt,
-              wenn sich der Status von <strong>belegt</strong> auf <strong>frei</strong> ändert.
+              Alerts werden erzeugt, wenn eine beobachtete Station von
+              <strong>belegt</strong> auf <strong>frei</strong> wechselt.
             </div>
           </div>
         </div>
@@ -613,7 +611,7 @@
         <div class="card">
           <div class="section-title">
             <h2>Karte & Stationen</h2>
-            <span class="subtle">Echte Interaktion mit Marker-Fokus</span>
+            <span class="subtle">Marker sollten jetzt sichtbar sein</span>
           </div>
 
           <div class="toolbar">
@@ -641,8 +639,8 @@
             <div id="map"></div>
             <div class="list-panel">
               <div class="hint-box">
-                Klicke in der Liste auf „Auf Karte“, um zur Station zu springen,
-                oder direkt auf Marker in der Karte.
+                Klicke auf „Auf Karte“, um zu einer Ladesäule zu springen,
+                oder direkt auf die Marker in der Karte.
               </div>
               <div id="stationList" class="station-list"></div>
             </div>
@@ -667,7 +665,7 @@
             <button class="btn danger small" id="clearAlertsBtn">Alerts löschen</button>
           </div>
           <div class="muted-note" style="margin-bottom: 12px;">
-            Alerts werden erzeugt, wenn eine beobachtete Station von „belegt“ auf „frei“ wechselt.
+            Alerts entstehen nur bei beobachteten Stationen.
           </div>
           <div id="alertHistory" class="history-list"></div>
         </div>
@@ -675,7 +673,7 @@
     </main>
 
     <div class="footer-note">
-      Charge Alert MVP · Leaflet + OpenStreetMap · Standalone HTML/CSS/JS
+      Charge Alert MVP · komplette index.html zum direkten Kopieren
     </div>
   </div>
 
@@ -703,10 +701,10 @@
   <script>
     (function () {
       const STORAGE_KEYS = {
-        stations: "chargeAlertLeafletStationsV3",
-        watchlist: "chargeAlertLeafletWatchlistV3",
-        alerts: "chargeAlertLeafletAlertsV3",
-        updatedAt: "chargeAlertLeafletUpdatedAtV3"
+        stations: "chargeAlertLeafletStationsV4",
+        watchlist: "chargeAlertLeafletWatchlistV4",
+        alerts: "chargeAlertLeafletAlertsV4",
+        updatedAt: "chargeAlertLeafletUpdatedAtV4"
       };
 
       const initialStations = [
@@ -801,6 +799,34 @@
         return "id-" + Math.random().toString(36).slice(2) + Date.now().toString(36);
       }
 
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function statusLabel(status) {
+        if (status === "free") return "Frei";
+        if (status === "busy") return "Belegt";
+        return "Unbekannt";
+      }
+
+      function statusClass(status) {
+        if (status === "free") return "status free";
+        if (status === "busy") return "status busy";
+        return "status unknown";
+      }
+
+      function toast(message) {
+        el.pollingBadge.textContent = "● " + message;
+        setTimeout(() => {
+          el.pollingBadge.textContent = "● Live-Simulation aktiv";
+        }, 1800);
+      }
+
       const state = {
         stations: load(STORAGE_KEYS.stations, initialStations),
         watchlist: load(STORAGE_KEYS.watchlist, []),
@@ -853,40 +879,6 @@
         state.alerts.unshift(entry);
         state.alerts = state.alerts.slice(0, 50);
         save(STORAGE_KEYS.alerts, state.alerts);
-      }
-
-      function statusLabel(status) {
-        if (status === "free") return "Frei";
-        if (status === "busy") return "Belegt";
-        return "Unbekannt";
-      }
-
-      function statusClass(status) {
-        if (status === "free") return "status free";
-        if (status === "busy") return "status busy";
-        return "status unknown";
-      }
-
-      function markerColor(status) {
-        if (status === "free") return "#22c55e";
-        if (status === "busy") return "#ef4444";
-        return "#f59e0b";
-      }
-
-      function escapeHtml(value) {
-        return String(value)
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      }
-
-      function toast(message) {
-        el.pollingBadge.textContent = "● " + message;
-        setTimeout(() => {
-          el.pollingBadge.textContent = "● Live-Simulation aktiv";
-        }, 1800);
       }
 
       function simulateStatusTick() {
@@ -945,6 +937,17 @@
           .sort((a, b) => a.distanceKm - b.distanceKm);
       }
 
+      function popupHtml(station) {
+        return `
+          <div style="min-width:200px;">
+            <strong>${escapeHtml(station.name)}</strong><br/>
+            <span>${escapeHtml(station.area)}</span><br/>
+            <span>${escapeHtml(station.plugs)} · ${escapeHtml(station.power)}</span><br/>
+            <span class="popup-status ${station.status}">${statusLabel(station.status)}</span>
+          </div>
+        `;
+      }
+
       function stationCard(station, includeMapButton = true) {
         const watched = isWatched(station.id);
         return `
@@ -982,37 +985,6 @@
         `;
       }
 
-      function popupHtml(station) {
-        return `
-          <div style="min-width:200px;">
-            <strong>${escapeHtml(station.name)}</strong><br/>
-            <span>${escapeHtml(station.area)}</span><br/>
-            <span>${escapeHtml(station.plugs)} · ${escapeHtml(station.power)}</span><br/>
-            <span class="popup-status ${station.status}">${statusLabel(station.status)}</span>
-          </div>
-        `;
-      }
-
-      function createIcon(status) {
-        const color = markerColor(status);
-        return L.divIcon({
-          className: "",
-          html: `
-            <div style="
-              width:18px;
-              height:18px;
-              border-radius:50%;
-              background:${color};
-              border:3px solid white;
-              box-shadow:0 0 0 3px rgba(0,0,0,.2);
-            "></div>
-          `,
-          iconSize: [18, 18],
-          iconAnchor: [9, 9],
-          popupAnchor: [0, -8]
-        });
-      }
-
       function ensureMap() {
         if (map) return;
 
@@ -1025,19 +997,14 @@
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-
-        setTimeout(() => {
-          map.invalidateSize();
-          fitMapToStations();
-        }, 50);
       }
 
       function updateMarkers() {
         ensureMap();
 
-        const visibleIds = new Set(filteredStations().map(s => s.id));
+        const visibleStations = filteredStations();
+        const visibleIds = new Set(visibleStations.map(s => s.id));
 
-        // delete hidden markers
         markers.forEach((marker, id) => {
           if (!visibleIds.has(id)) {
             map.removeLayer(marker);
@@ -1045,17 +1012,33 @@
           }
         });
 
-        // add/update visible markers
-        filteredStations().forEach(station => {
+        visibleStations.forEach(station => {
           const existing = markers.get(station.id);
+
+          const color =
+            station.status === "free"
+              ? "#22c55e"
+              : station.status === "busy"
+              ? "#ef4444"
+              : "#f59e0b";
 
           if (existing) {
             existing.setLatLng([station.lat, station.lng]);
-            existing.setIcon(createIcon(station.status));
+            existing.setStyle({
+              color: "#ffffff",
+              weight: 2,
+              fillColor: color,
+              fillOpacity: 0.95,
+              radius: 10
+            });
             existing.setPopupContent(popupHtml(station));
           } else {
-            const marker = L.marker([station.lat, station.lng], {
-              icon: createIcon(station.status)
+            const marker = L.circleMarker([station.lat, station.lng], {
+              radius: 10,
+              color: "#ffffff",
+              weight: 2,
+              fillColor: color,
+              fillOpacity: 0.95
             })
               .addTo(map)
               .bindPopup(popupHtml(station));
@@ -1077,7 +1060,11 @@
         const bounds = L.latLngBounds(
           stations.map(s => [s.lat, s.lng])
         );
-        map.fitBounds(bounds, { padding: [30, 30] });
+
+        setTimeout(() => {
+          map.invalidateSize();
+          map.fitBounds(bounds, { padding: [40, 40] });
+        }, 80);
       }
 
       function focusStation(id) {
@@ -1087,10 +1074,14 @@
         if (!station) return;
 
         switchScreen("map");
+
         setTimeout(() => {
-          map.setView([station.lat, station.lng], 14, { animate: true });
-          if (marker) marker.openPopup();
-        }, 50);
+          map.invalidateSize();
+          map.setView([station.lat, station.lng], 15, { animate: true });
+          if (marker) {
+            marker.openPopup();
+          }
+        }, 120);
       }
 
       function renderHomeStations() {
@@ -1136,7 +1127,9 @@
         el.statFree.textContent = String(freeCount);
         el.statWatch.textContent = String(state.watchlist.length);
         el.statAlerts.textContent = String(state.alerts.length);
-        el.lastUpdatedLabel.textContent = state.updatedAt ? `Letztes Update: ${state.updatedAt}` : "Noch kein Check";
+        el.lastUpdatedLabel.textContent = state.updatedAt
+          ? `Letztes Update: ${state.updatedAt}`
+          : "Noch kein Check";
       }
 
       function bindDynamicActions() {
@@ -1188,30 +1181,27 @@
           setTimeout(() => {
             map.invalidateSize();
             updateMarkers();
-          }, 50);
+            fitMapToStations();
+          }, 120);
         }
       }
 
-      // static nav
       document.querySelectorAll(".nav-btn").forEach(btn => {
         btn.addEventListener("click", () => switchScreen(btn.getAttribute("data-screen")));
       });
 
-      // top actions
       document.getElementById("refreshNowBtn").addEventListener("click", refreshNow);
       document.getElementById("simulateBtn").addEventListener("click", refreshNow);
       document.getElementById("goMapBtn").addEventListener("click", () => switchScreen("map"));
       document.getElementById("openAllStationsBtn").addEventListener("click", () => switchScreen("map"));
       document.getElementById("fitMapBtn").addEventListener("click", () => {
         switchScreen("map");
-        setTimeout(() => fitMapToStations(), 60);
+        setTimeout(() => fitMapToStations(), 140);
       });
 
-      // filters
       el.searchInput.addEventListener("input", renderStations);
       el.statusFilter.addEventListener("change", renderStations);
 
-      // clear actions
       document.getElementById("clearWatchlistBtn").addEventListener("click", () => {
         state.watchlist = [];
         save(STORAGE_KEYS.watchlist, state.watchlist);
@@ -1226,18 +1216,20 @@
         toast("Alerts gelöscht");
       });
 
-      // initial state
       if (!state.updatedAt) {
         setUpdatedNow();
         save(STORAGE_KEYS.stations, state.stations);
       }
 
       render();
-      ensureMap();
-      updateMarkers();
-      fitMapToStations();
 
-      // polling simulation
+      setTimeout(() => {
+        ensureMap();
+        map.invalidateSize();
+        updateMarkers();
+        fitMapToStations();
+      }, 150);
+
       setInterval(() => {
         simulateStatusTick();
       }, 12000);
